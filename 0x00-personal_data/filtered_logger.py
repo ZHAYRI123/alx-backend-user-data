@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 import re
 
+import re
+
 def filter_datum(fields, redaction, message, separator):
-    pattern = separator.join(re.escape(field) + r'=[^' + re.escape(separator) + ']*' for field in fields)
-    return re.sub(pattern, lambda match: match.group(0).split('=')[0] + '=' + redaction, message)
+    """ Returns regex obfuscated log messages """
+    for field in fields:
+        p = re.escape(field) + r'=([^' + re.escape(separator) + ']*)'
+        message = re.sub(p, lambda match: field + '=' + redaction, message)
+    return message
